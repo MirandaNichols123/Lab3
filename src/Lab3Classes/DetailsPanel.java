@@ -23,7 +23,7 @@ public class DetailsPanel extends JPanel
         //add scroll for overflow
         add(new JScrollPane(detailsArea), BorderLayout.CENTER);
     }
-    //method to display details of the selected dataItem
+    //Displays details of the selected dataItem
     public void showDetails(DataItem item)
     {
         if (item != null)

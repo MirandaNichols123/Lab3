@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DataVisualizationTool
+public class DataVisualization
 {
     private TablePanel tablePanel;
+    private Filters filters;
     private StatsPanel statsPanel;
     private PieChart pieChart;
     private DetailsPanel detailsPanel;
-    private static final Logger logger= Logger.getLogger(DataVisualizationTool.class.getName());//logger for error logging
+    private static final Logger logger= Logger.getLogger(DataVisualization.class.getName());//logger for error logging
 
     public static void main()
     {
@@ -23,14 +24,14 @@ public class DataVisualizationTool
                 //uses the logger to log the exception
                 logger.log(Level.SEVERE, "Failed to set Look and Feel", e);
             }
-            DataVisualizationTool app = new DataVisualizationTool();//create application instance
-            app.createAndShowGUI();//initializes and displau GUI
+            DataVisualization app = new DataVisualization();//create application instance
+            app.createAndShowGUI();//initializes and display GUI
         });
     }
 
     public void createAndShowGUI()
     {
-        JFrame frame = new JFrame("Data Visualization Tool");
+        JFrame frame = new JFrame("Data Visualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -66,17 +67,20 @@ public class DataVisualizationTool
     }
 
     //initializes main components of GUI with data items
-    private void initializeComponents(List<DataItem> dataItems) {
+    private void initializeComponents(List<DataItem> dataItems)
+    {
         statsPanel = new StatsPanel();
         pieChart = new PieChart(dataItems);
         tablePanel = new TablePanel(dataItems, statsPanel, pieChart);
+        filters = new Filters(dataItems, tablePanel);
         detailsPanel = new DetailsPanel();
 
         //update stats with initial data
         statsPanel.updateStats(dataItems);
 
         //set up table selection listener
-        tablePanel.getTable().getSelectionModel().addListSelectionListener(_ -> {
+        tablePanel.getTable().getSelectionModel().addListSelectionListener(_ ->
+        {
             int selectedRow = tablePanel.getTable().getSelectedRow();
             if (selectedRow != -1) //proceed if row is selected
             {
@@ -90,8 +94,14 @@ public class DataVisualizationTool
     //sets layout structures
     private void setupLayout(JFrame frame)
     {
-        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);//main split pane, divides horizontally
-        mainSplitPane.setLeftComponent(tablePanel);//set on left side
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BorderLayout());//use BorderLayout for vertical stacking
+        leftPanel.add(filters, BorderLayout.NORTH);//place filters at the top
+        leftPanel.add(tablePanel, BorderLayout.CENTER);//place table panel below filters
+
+        // Main split pane, dividing horizontally
+        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        mainSplitPane.setLeftComponent(leftPanel);//set left panel with filters and table panel
 
         JSplitPane rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);//right split pane, divides vertically
         rightSplitPane.setTopComponent(detailsPanel);//set details at top of right split

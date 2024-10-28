@@ -65,38 +65,38 @@ public class StatsPanel extends JPanel
         //update averages
         updateLabels(avgLabels, new double[]
                 {
-                DataLoader.calculateAverageFriction(dataItems),
-                DataLoader.calculateAverageVerticalDisp(dataItems),
-                DataLoader.calculateAverageConfiningPressure(dataItems),
-                DataLoader.calculateAverageDisplacement(dataItems),
-                DataLoader.calculateAverageNormalStress(dataItems),
-                DataLoader.calculateAverageShearStress(dataItems),
-                DataLoader.calculateAverageTime(dataItems),
-                DataLoader.calculateAverageVelocity(dataItems)
+                DataStatistics.calculateAverageFriction(dataItems),
+                DataStatistics.calculateAverageVerticalDisp(dataItems),
+                DataStatistics.calculateAverageConfiningPressure(dataItems),
+                DataStatistics.calculateAverageDisplacement(dataItems),
+                DataStatistics.calculateAverageNormalStress(dataItems),
+                DataStatistics.calculateAverageShearStress(dataItems),
+                DataStatistics.calculateAverageTime(dataItems),
+                DataStatistics.calculateAverageVelocity(dataItems)
         });
         //update min
         updateLabels(minLabels, new double[]
                 {
-                DataLoader.calcMinFriction(dataItems),
-                DataLoader.calcMinVerticalDisp(dataItems),
-                DataLoader.calcMinConfiningPressure(dataItems),
-                DataLoader.calcMinDisplacement(dataItems),
-                DataLoader.calcMinNormalStress(dataItems),
-                DataLoader.calcMinShearStress(dataItems),
-                DataLoader.calcMinTime(dataItems),
-                DataLoader.calcMinVelocity(dataItems)
+                DataStatistics.calcMinFriction(dataItems),
+                DataStatistics.calcMinVerticalDisp(dataItems),
+                DataStatistics.calcMinConfiningPressure(dataItems),
+                DataStatistics.calcMinDisplacement(dataItems),
+                DataStatistics.calcMinNormalStress(dataItems),
+                DataStatistics.calcMinShearStress(dataItems),
+                DataStatistics.calcMinTime(dataItems),
+                DataStatistics.calcMinVelocity(dataItems)
         });
         //update max
         updateLabels(maxLabels, new double[]
                 {
-                DataLoader.calcMaxFriction(dataItems),
-                DataLoader.calcMaxVerticalDisp(dataItems),
-                DataLoader.calcMaxConfiningPressure(dataItems),
-                DataLoader.calcMaxDisplacement(dataItems),
-                DataLoader.calcMaxNormalStress(dataItems),
-                DataLoader.calcMaxShearStress(dataItems),
-                DataLoader.calcMaxTime(dataItems),
-                DataLoader.calcMaxVelocity(dataItems)
+                DataStatistics.calcMaxFriction(dataItems),
+                DataStatistics.calcMaxVerticalDisp(dataItems),
+                DataStatistics.calcMaxConfiningPressure(dataItems),
+                DataStatistics.calcMaxDisplacement(dataItems),
+                DataStatistics.calcMaxNormalStress(dataItems),
+                DataStatistics.calcMaxShearStress(dataItems),
+                DataStatistics.calcMaxTime(dataItems),
+                DataStatistics.calcMaxVelocity(dataItems)
         });
     }
     //update label text for array of labels with values
