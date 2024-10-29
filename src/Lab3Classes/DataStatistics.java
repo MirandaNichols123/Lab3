@@ -7,7 +7,7 @@ public class DataStatistics
         //create stream from list of DataItem objects
         return dataItems.stream()
                 //mapper function to each DataItem to get a stream of doubles
-                .mapToDouble(DataItem::coefficientFriction) // This is correct
+                .mapToDouble(DataItem::coefficientFriction)//make Friction into a map
                 .average()//calc avg of double values in stream
                 //return avg value, or 0 if stream is empty
                 .orElse(0);
