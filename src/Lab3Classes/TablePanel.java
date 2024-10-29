@@ -75,8 +75,6 @@ public class TablePanel extends JPanel
         pieChart.updateData(dataItems);//update pie chart based on filtered data
     }
 
-
-
     public JTable getTable()
     {
         return table;//return table instance

@@ -22,7 +22,8 @@ public class PieChart extends JPanel
         //aggregate data based on some criteria
         Map<String, Double> dataMap = new HashMap<>();
         //loop through DataItem list to categorize and sum values
-        for (DataItem item : dataItems) {
+        for (DataItem item : dataItems)
+        {
             String category = item.coefficientFriction() > 0.5 ? "High Friction" : "Low Friction";
             //update category total
             dataMap.put(category, dataMap.getOrDefault(category, 0.0) + item.coefficientFriction());
@@ -37,7 +38,8 @@ public class PieChart extends JPanel
         drawPieChart(g);//draw pie chart
         drawLegend(g);//indicated category colors
     }
-    private void drawPieChart(Graphics g) {
+    private void drawPieChart(Graphics g)
+    {
         int total = data.values().stream().mapToInt(Double::intValue).sum();//sum all values
         int startAngle = 0;//starting angle for pie slices
         int width = getWidth();
@@ -47,7 +49,8 @@ public class PieChart extends JPanel
         int y = (height - diameter) / 2;//Y position
 
         //loop through data entries to draw pie slice
-        for (Map.Entry<String, Double> entry : data.entrySet()) {
+        for (Map.Entry<String, Double> entry : data.entrySet())
+        {
             String category = entry.getKey();//get name
             double value = entry.getValue();//get value
 
@@ -61,7 +64,8 @@ public class PieChart extends JPanel
     //returns color associated with category
     private Color getColor(String category)
     {
-        return switch (category) {
+        return switch (category)
+        {
             case "High Friction" -> Color.RED;//high friction represented in red
             case "Low Friction" -> Color.BLUE;//low friction represented in blue
             default -> Color.GRAY;//default color

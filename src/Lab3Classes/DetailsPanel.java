@@ -16,8 +16,6 @@ public class DetailsPanel extends JPanel
         //initialize and configure the text area
         detailsArea = new JTextArea();
         detailsArea.setEditable(false);//disable editing
-        detailsArea.setLineWrap(true);//enable word wrap
-        detailsArea.setWrapStyleWord(true);//wrap on word boundaries
         detailsArea.setMargin(new Insets(10, 10, 10, 10));
 
         //add scroll for overflow

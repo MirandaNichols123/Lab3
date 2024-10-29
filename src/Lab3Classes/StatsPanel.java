@@ -49,11 +49,12 @@ public class StatsPanel extends JPanel
         sectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));//use FlowLayout for horizontal
         //create and add section title labels
         JLabel sectionLabel = new JLabel("%s: ".formatted(title), SwingConstants.LEFT);
-        sectionLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        sectionLabel.setFont(new Font("Arial", Font.BOLD, 12));
         sectionPanel.add(sectionLabel);
 
         //add each label to section panel
-        for (JLabel label : labels) {
+        for (JLabel label : labels)
+        {
             sectionPanel.add(label);
         }
         return sectionPanel;//returns section panel
