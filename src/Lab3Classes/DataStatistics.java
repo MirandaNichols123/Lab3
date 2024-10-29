@@ -15,7 +15,7 @@ public class DataStatistics
     public static double calculateAverageVerticalDisp(List<DataItem> dataItems)
     {
         return dataItems.stream()
-                .mapToDouble(DataItem::verticalDispMicrons) // Ensure you have this accessor in DataItem
+                .mapToDouble(DataItem::verticalDispMicrons)
                 .average()
                 .orElse(0);
     }
