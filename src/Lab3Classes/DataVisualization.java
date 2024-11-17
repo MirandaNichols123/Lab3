@@ -13,7 +13,8 @@ public class DataVisualization
     private DetailsPanel detailsPanel;
     private static final Logger logger= Logger.getLogger(DataVisualization.class.getName());//logger for error logging
 
-    public static void main()
+    //public static void main(args[])
+    public static void main(String[] args)
     {
         //GUI runs on Event Dispatch Thread
         SwingUtilities.invokeLater(() ->
@@ -77,6 +78,9 @@ public class DataVisualization
 
         //update stats with initial data
         statsPanel.updateStats(dataItems);
+
+        tablePanel.addObserver(statsPanel);
+        tablePanel.addObserver(pieChart);
 
         //set up table selection listener
         tablePanel.getTable().getSelectionModel().addListSelectionListener(_ ->

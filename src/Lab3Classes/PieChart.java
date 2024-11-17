@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PieChart extends JPanel
+public class PieChart extends JPanel implements TableObserver
 {
     private final Map<String, Double> data;//data for the pie chart
     public PieChart(List<DataItem> dataItems)
@@ -15,6 +16,12 @@ public class PieChart extends JPanel
         JLabel headerLabel = new JLabel("Pie Chart", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 14));
         add(headerLabel, BorderLayout.NORTH);
+    }
+
+    @Override
+    public void update(List<DataItem> dataItems) {
+        // The `update` method from TableObserver
+        updateData(dataItems);
     }
 
     private Map<String, Double> calculateData(List<DataItem> dataItems)

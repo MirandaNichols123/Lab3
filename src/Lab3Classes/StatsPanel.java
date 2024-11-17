@@ -2,15 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class StatsPanel extends JPanel
+public class StatsPanel extends JPanel implements TableObserver
 {
     private final JLabel[] avgLabels;
     private final JLabel[] minLabels;
     private final JLabel[] maxLabels;
 
     //sets up the panel layout and initializes labels
-    public StatsPanel()
-    {
+    public StatsPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));//set vertical layout for panel
         //create a header label for the stats section
         JLabel headerLabel = new JLabel("Statistics", SwingConstants.CENTER);
@@ -32,6 +31,12 @@ public class StatsPanel extends JPanel
         add(createSection("Average", avgLabels));
         add(createSection("Minimum", minLabels));
         add(createSection("Maximum", maxLabels));
+    }
+
+        @Override
+        public void update(List<DataItem> dataItems) {
+        // The `update` method from TableObserver
+        updateStats(dataItems);
     }
     //helper method to create jLabel array with default values
     private JLabel[] createLabels(String[] texts)

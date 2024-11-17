@@ -3,6 +3,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TablePanel extends JPanel
@@ -10,15 +11,15 @@ public class TablePanel extends JPanel
     private final JTable table;
     private final TableRowSorter<TableModel> sorter;
     private final DefaultTableModel tableModel;
-    private final StatsPanel statsPanel;
-    private final PieChart pieChart;
+    private final List<TableObserver> observers = new ArrayList<TableObserver>();
+    //private final PieChart pieChart;
 
     public TablePanel(List<DataItem> dataItems, StatsPanel statsPanel, PieChart pieChart)
     {
         setLayout(new BorderLayout());
         //store references to panel/chart
-        this.statsPanel = statsPanel;
-        this.pieChart = pieChart;
+        //this.statsPanel = statsPanel;
+        //this.pieChart = pieChart;
 
         //create table model with column names
         String[] columnNames =
@@ -71,10 +72,25 @@ public class TablePanel extends JPanel
     {
         populateTable(dataItems);//populate table with filtered data
         sorter.setModel(tableModel);//update sorter with new model
-        statsPanel.updateStats(dataItems);//update stats based on filtered data
-        pieChart.updateData(dataItems);//update pie chart based on filtered data
+        //statsPanel.updateStats(dataItems);//update stats based on filtered data
+        //pieChart.updateData(dataItems);//update pie chart based on filtered data
+        notifyObservers(dataItems);
     }
-
+    public void addObserver(TableObserver observer)
+    {
+        observers.add(observer);
+    }
+    public void removeObserver(TableObserver observer)
+    {
+        observers.remove(observer);
+    }
+    public void notifyObservers(List<DataItem> dataItems)
+    {
+        for (TableObserver observer : observers)
+        {
+            observer.update(dataItems);
+        }
+    }
     public JTable getTable()
     {
         return table;//return table instance
