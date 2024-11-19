@@ -35,7 +35,7 @@ public class Filters extends JPanel
         filter2.addActionListener(_ -> updateTableWithFilters());
         filter3.addActionListener(_ -> updateTableWithFilters());
     }
-    //updates stats and chart with filters
+    //updates s and chart with filters
     private void updateTableWithFilters()
     {
         List<DataItem> filteredItems = applyFilters();

@@ -41,7 +41,7 @@ public class DataVisualization
         if (dataItems == null) return;//exit if loading failed
 
         //initialize GUI components
-        initializeComponents(dataItems);
+        initializeComponents(frame, dataItems);
 
         setupLayout(frame);
 
@@ -66,19 +66,25 @@ public class DataVisualization
             return null;//return null if loading fails
         }
     }
-
     //initializes main components of GUI with data items
-    private void initializeComponents(List<DataItem> dataItems)
+    private void initializeComponents(JFrame frame, List<DataItem> dataItems)
     {
-        statsPanel = new StatsPanel();
+        statsPanel= new StatsPanel();
         pieChart = new PieChart(dataItems);
         tablePanel = new TablePanel(dataItems, statsPanel, pieChart);
         filters = new Filters(dataItems, tablePanel);
         detailsPanel = new DetailsPanel();
 
         //update stats with initial data
-        statsPanel.updateStats(dataItems);
+        statsPanel.update(dataItems);
 
+        //average, min, and max strategy
+        StatStrategy averageStrategy = new AverageStatsStrategy();
+        StatStrategy minStrategy = new MinStatsStrategy();
+        StatStrategy maxStrategy = new MaxStatsStrategy();
+
+        statsPanel.setStrategy(averageStrategy);
+        statsPanel.update(dataItems);
         tablePanel.addObserver(statsPanel);
         tablePanel.addObserver(pieChart);
 
@@ -93,8 +99,36 @@ public class DataVisualization
                 detailsPanel.showDetails(selectedItem);//show details of selected item in details panel
             }
         });
-    }
+        //strategy selection dropdown (JComboBox)
+        String[] strategies = {"Average", "Minimum", "Maximum"};
+        JComboBox<String> strategyComboBox = new JComboBox<>(strategies);
+        strategyComboBox.addActionListener(_ -> {
+            String selectedStrategy = (String) strategyComboBox.getSelectedItem();
+            //check if selectedStrategy is not null
+            if (selectedStrategy != null) {
+                switch (selectedStrategy) {
+                    case "Average":
+                        statsPanel.setStrategy(averageStrategy);
+                        break;
+                    case "Minimum":
+                        statsPanel.setStrategy(minStrategy);
+                        break;
+                    case "Maximum":
+                        statsPanel.setStrategy(maxStrategy);
+                        break;
+                }
+                //updates stats after strategy change
+                statsPanel.update(dataItems);
+            }
+        });
 
+        //adds the JComboBox to the frame or panel
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(new JLabel("Select Strategy:"));
+        controlPanel.add(strategyComboBox);
+        //adds to the bottom of the frame
+        frame.add(controlPanel, BorderLayout.SOUTH);
+    }
     //sets layout structures
     private void setupLayout(JFrame frame)
     {
@@ -103,8 +137,7 @@ public class DataVisualization
         leftPanel.add(filters, BorderLayout.NORTH);//place filters at the top
         leftPanel.add(tablePanel, BorderLayout.CENTER);//place table panel below filters
 
-        // Main split pane, dividing horizontally
-        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);//splits horizontally
         mainSplitPane.setLeftComponent(leftPanel);//set left panel with filters and table panel
 
         JSplitPane rightSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);//right split pane, divides vertically

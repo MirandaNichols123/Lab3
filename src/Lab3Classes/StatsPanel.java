@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class StatsPanel extends JPanel implements TableObserver
-{
-    private final JLabel[] avgLabels;
-    private final JLabel[] minLabels;
-    private final JLabel[] maxLabels;
+public class StatsPanel extends JPanel implements TableObserver {
+    //private final JLabel[] avgLabels;
+    //private final JLabel[] minLabels;
+    //private final JLabel[] maxLabels;
+    private final JLabel[] statLabels;
+    private StatStrategy strategy;
+
 
     //sets up the panel layout and initializes labels
     public StatsPanel() {
@@ -23,95 +25,65 @@ public class StatsPanel extends JPanel implements TableObserver
                 "Time: ", "Velocity: "
         };
         //initialized labels for avg, min, and max stats
-        avgLabels = createLabels(Texts);
-        minLabels = createLabels(Texts);
-        maxLabels = createLabels(Texts);
+        //avgLabels = createLabels(Texts);
+        //minLabels = createLabels(Texts);
+        //maxLabels = createLabels(Texts);
         //add components to the panel
-        add(headerLabel); // Header at the top
-        add(createSection("Average", avgLabels));
-        add(createSection("Minimum", minLabels));
-        add(createSection("Maximum", maxLabels));
+        //add(headerLabel); // Header at the top
+        //add(createSection("Average", avgLabels));
+        //add(createSection("Minimum", minLabels));
+        //add(createSection("Maximum", maxLabels));
+        statLabels = createLabels(Texts);
+        add(headerLabel);
+        add(createSection(statLabels));
     }
 
-        @Override
-        public void update(List<DataItem> dataItems) {
-        // The `update` method from TableObserver
-        updateStats(dataItems);
-    }
-    //helper method to create jLabel array with default values
-    private JLabel[] createLabels(String[] texts)
-    {
-        JLabel[] labels = new JLabel[texts.length];
-        for (int i = 0; i < texts.length; i++) {
-            labels[i] = new JLabel("%s0.00".formatted(texts[i]));//initialize with default value
+    //update statistics dynamically using the strategy pattern
+    @Override
+    public void update(List<DataItem> dataItems) {
+        if (strategy != null) {
+            double[] results = strategy.calculate(dataItems); // Use strategy to calculate stats
+            updateLabels(statLabels, results); // Update the display with calculated values
         }
-        return labels;
-    }
-    //create JPanel for each stats category(avg, min, max)
-    private JPanel createSection(String title, JLabel[] labels)
-    {
-        JPanel sectionPanel = new JPanel();
-        sectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));//use FlowLayout for horizontal
-        //create and add section title labels
-        JLabel sectionLabel = new JLabel("%s: ".formatted(title), SwingConstants.LEFT);
-        sectionLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        sectionPanel.add(sectionLabel);
-
-        //add each label to section panel
-        for (JLabel label : labels)
-        {
-            sectionPanel.add(label);
-        }
-        return sectionPanel;//returns section panel
     }
 
-    //method to update stats in the panel
-    public void updateStats(List<DataItem> dataItems)
-    {
-        //update averages
-        updateLabels(avgLabels, new double[]
-                {
-                DataStatistics.calculateAverageFriction(dataItems),
-                DataStatistics.calculateAverageVerticalDisp(dataItems),
-                DataStatistics.calculateAverageConfiningPressure(dataItems),
-                DataStatistics.calculateAverageDisplacement(dataItems),
-                DataStatistics.calculateAverageNormalStress(dataItems),
-                DataStatistics.calculateAverageShearStress(dataItems),
-                DataStatistics.calculateAverageTime(dataItems),
-                DataStatistics.calculateAverageVelocity(dataItems)
-        });
-        //update min
-        updateLabels(minLabels, new double[]
-                {
-                DataStatistics.calcMinFriction(dataItems),
-                DataStatistics.calcMinVerticalDisp(dataItems),
-                DataStatistics.calcMinConfiningPressure(dataItems),
-                DataStatistics.calcMinDisplacement(dataItems),
-                DataStatistics.calcMinNormalStress(dataItems),
-                DataStatistics.calcMinShearStress(dataItems),
-                DataStatistics.calcMinTime(dataItems),
-                DataStatistics.calcMinVelocity(dataItems)
-        });
-        //update max
-        updateLabels(maxLabels, new double[]
-                {
-                DataStatistics.calcMaxFriction(dataItems),
-                DataStatistics.calcMaxVerticalDisp(dataItems),
-                DataStatistics.calcMaxConfiningPressure(dataItems),
-                DataStatistics.calcMaxDisplacement(dataItems),
-                DataStatistics.calcMaxNormalStress(dataItems),
-                DataStatistics.calcMaxShearStress(dataItems),
-                DataStatistics.calcMaxTime(dataItems),
-                DataStatistics.calcMaxVelocity(dataItems)
-        });
+//helper method to create jLabel array with default values
+private JLabel[] createLabels(String[] texts)
+{
+    JLabel[] labels = new JLabel[texts.length];
+    for (int i = 0; i < texts.length; i++) {
+        labels[i] = new JLabel("%s0.00".formatted(texts[i]));//initialize with default value
     }
-    //update label text for array of labels with values
-    private void updateLabels(JLabel[] labels, double[] values)
+    return labels;
+}
+//create JPanel for each stats category(avg, min, max)
+private JPanel createSection(JLabel[] labels)
+{
+    JPanel sectionPanel = new JPanel();
+    sectionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));//use FlowLayout for horizontal
+    //create and add section title labels
+    JLabel sectionLabel = new JLabel("%s: ".formatted("Statistics"), SwingConstants.LEFT);
+    sectionLabel.setFont(new Font("Arial", Font.BOLD, 12));
+    sectionPanel.add(sectionLabel);
+
+    //add each label to section panel
+    for (JLabel label : labels)
     {
-        for (int i = 0; i < labels.length; i++)
-        {
-            //update label with formatted text and values
-            labels[i].setText(String.format("%s%.4f", "%s: ".formatted(labels[i].getText().split(":")[0]), values[i]));
-        }
+        sectionPanel.add(label);
     }
+    return sectionPanel;//returns section panel
+}
+
+// Helper method to update JLabel text with calculated values
+private void updateLabels(JLabel[] labels, double[] values) {
+    for (int i = 0; i < labels.length; i++) {
+        // Update label with formatted text and values
+        labels[i].setText(String.format("%s%.4f", "%s: ".formatted(labels[i].getText().split(":")[0]), values[i]));
+    }
+}
+
+// Set the current strategy for statistics calculation
+public void setStrategy(StatStrategy strategy) {
+    this.strategy = strategy;
+}
 }

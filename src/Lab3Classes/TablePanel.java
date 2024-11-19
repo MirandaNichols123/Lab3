@@ -11,15 +11,13 @@ public class TablePanel extends JPanel
     private final JTable table;
     private final TableRowSorter<TableModel> sorter;
     private final DefaultTableModel tableModel;
-    private final List<TableObserver> observers = new ArrayList<TableObserver>();
-    //private final PieChart pieChart;
+    private final List<TableObserver> observers = new ArrayList<>();
 
     public TablePanel(List<DataItem> dataItems, StatsPanel statsPanel, PieChart pieChart)
     {
         setLayout(new BorderLayout());
-        //store references to panel/chart
-        //this.statsPanel = statsPanel;
-        //this.pieChart = pieChart;
+        addObserver(statsPanel);
+        addObserver(pieChart);
 
         //create table model with column names
         String[] columnNames =
@@ -44,7 +42,6 @@ public class TablePanel extends JPanel
         //add table to JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-
     }
     //method to populate the table with data
     private void populateTable(List<DataItem> dataItems)
@@ -72,18 +69,15 @@ public class TablePanel extends JPanel
     {
         populateTable(dataItems);//populate table with filtered data
         sorter.setModel(tableModel);//update sorter with new model
-        //statsPanel.updateStats(dataItems);//update stats based on filtered data
-        //pieChart.updateData(dataItems);//update pie chart based on filtered data
         notifyObservers(dataItems);
     }
+
+    //add observe so panels can use whenever tablePanel is used by filters
     public void addObserver(TableObserver observer)
     {
         observers.add(observer);
     }
-    public void removeObserver(TableObserver observer)
-    {
-        observers.remove(observer);
-    }
+    //notifies and updates the observer
     public void notifyObservers(List<DataItem> dataItems)
     {
         for (TableObserver observer : observers)

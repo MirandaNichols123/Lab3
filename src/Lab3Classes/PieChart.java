@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class PieChart extends JPanel implements TableObserver
 
     @Override
     public void update(List<DataItem> dataItems) {
-        // The `update` method from TableObserver
+        // The update method from TableObserver
         updateData(dataItems);
     }
 
@@ -37,7 +36,6 @@ public class PieChart extends JPanel implements TableObserver
         }
         return dataMap;//returns aggregated data map
     }
-
     @Override
     protected void paintComponent(Graphics g)
     {
